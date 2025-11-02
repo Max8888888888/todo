@@ -27,3 +27,49 @@ npx playwright test --debug
 ```
 
 More debugging references: https://playwright.dev/docs/debug and https://playwright.dev/docs/trace-viewer
+
+## FleetPass Invoice Downloader
+
+A Playwright-powered helper script lives at `tests/scripts/download-fleetpass-invoice.js`. It logs into FleetPass, navigates to the invoice list, and downloads a matching invoice. Credentials and matching criteria are supplied via environment variables or CLI flags.
+
+### Setup
+
+1. `cd tests`
+2. Install dependencies and browsers once: `npm install && npx playwright install`
+3. Create a `.env` file (optional) with:
+
+   ```dotenv
+   FLEETPASS_USERNAME=your_username
+   FLEETPASS_PASSWORD=your_password
+   FLEETPASS_INVOICE_NUMBER=12345678
+   # Optional tweaks
+   # FLEETPASS_DOWNLOAD_DIR=./downloads
+   # FLEETPASS_HEADLESS=false
+   ```
+
+### Usage
+
+- Run with npm script (loads `.env` automatically via `dotenv`):
+
+  ```bash
+  npm run download:fleetpass
+  ```
+
+- Or pass parameters directly:
+
+  ```bash
+  node ./scripts/download-fleetpass-invoice.js \
+    --username your_username \
+    --password your_password \
+    --invoice-number 12345678 \
+    --download-dir ./invoices
+  ```
+
+### Advanced configuration
+
+- Override login/endpoints: `--login-url`, `--invoices-url`
+- Match by date or a custom locator: `--invoice-date 2025-09` or `--invoice-row-selector "tr:has-text('September 2025')"`
+- Provide alternative form/download selectors if FleetPass markup differs: `--username-selectors "#userId,input[name='UserId']"`
+- Add `--headless false` or `--slowmo 250` for debugging, `--debug` to log the selectors used
+
+Downloaded files default to `tests/downloads/` with a descriptive filename. Existing files are never overwritten; numeric suffixes are appended when needed.
