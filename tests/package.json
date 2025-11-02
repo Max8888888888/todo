@@ -1,4 +1,7 @@
 {
+    "scripts": {
+        "download:fleetpass": "node ./scripts/download-fleetpass-invoice.js"
+    },
     "devDependencies": {
         "@playwright/test": "^1.22.2",
         "@types/uuid": "^8.3.4",
